@@ -6,6 +6,5 @@ echo GridView::widget([
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         'name',
-        ['class' => 'yii\grid\ActionColumn'],
     ],
 ]);

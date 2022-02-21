@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= AuthorBooks::widget(['id' => \common\models\Author::findOne(3)]); ?>
+    <?= AuthorBooks::widget(['model' => \common\models\Author::findOne(3)]); ?>
 
 </div>
 

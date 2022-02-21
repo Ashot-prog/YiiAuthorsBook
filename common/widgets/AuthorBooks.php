@@ -12,20 +12,14 @@ use yii\helpers\Html;
 
 class AuthorBooks extends Widget
 {
-    public $id;
     public $model;
-
-    public function rules()
-    {
-        return [
-            [['id'], 'required'],
-        ];
-    }
 
     public function init()
     {
         parent::init();
-        $this->model = Author::findOne($this->id);
+        if (is_null($this->model)){
+            $this->model = Author::findOne($this->id);
+        }
     }
 
     public function run()

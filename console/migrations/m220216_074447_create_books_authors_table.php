@@ -14,8 +14,8 @@ class m220216_074447_create_books_authors_table extends Migration
     {
         $this->createTable('{{%books_authors}}', [
             'id' => $this->primaryKey(),
-            'book_id' => $this->bigInteger(),
-            'author_id' => $this->bigInteger(),
+            'book_id' => $this->integer(),
+            'author_id' => $this->integer(),
             'created_at' => $this->dateTime(),
         ]);
     }

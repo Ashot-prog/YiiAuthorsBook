@@ -7,6 +7,7 @@ use common\models\BookAuthor;
 use common\models\Book;
 use common\models\BookSearch;
 use yii\base\BaseObject;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,9 +27,17 @@ class BookController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
-                    'actions' => [
-                        'delete' => ['POST'],
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'actions' => ['login', 'error'],
+                            'allow' => true,
+                        ],
+                        [
+                            'actions' => ['logout', 'index', 'book','create','update','view','author'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
                     ],
                 ],
             ]
@@ -61,7 +70,7 @@ class BookController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'author_id' => ArrayHelper::map(Author::find()->asArray()->all(), 'id', 'name')
+            'author_id' => $this->findAuthorId()
         ]);
     }
 
@@ -81,7 +90,7 @@ class BookController extends Controller
         }
         return $this->render('create', [
             'model' => $model,
-            'author_id' => ArrayHelper::map(Author::find()->asArray()->all(), 'id', 'name')
+            'author_id' => $this->findAuthorId()
         ]);
     }
 
@@ -142,5 +151,10 @@ class BookController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function findAuthorId()
+    {
+        return ArrayHelper::map(Author::find()->asArray()->all(), 'id', 'name');
     }
 }
