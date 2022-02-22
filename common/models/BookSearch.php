@@ -10,6 +10,8 @@ use yii\data\ActiveDataProvider;
  */
 class BookSearch extends Book
 {
+    public $authors;
+
     /**
      * {@inheritdoc}
      */
@@ -17,7 +19,7 @@ class BookSearch extends Book
     {
         return [
             [['id'], 'integer'],
-            [['name', 'created_at'], 'safe'],
+            [['name', 'created_at','authors'], 'safe'],
         ];
     }
 
@@ -39,8 +41,7 @@ class BookSearch extends Book
      */
     public function search($params)
     {
-        $query = Book::find();
-
+        $query = Book::find()->innerJoinWith('authors',true);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -57,11 +58,11 @@ class BookSearch extends Book
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'author_id' => $this->authors,
             'id' => $this->id,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
-//            ->andFilterWhere(['like', 'author_id', $this->author_id]);
         return $dataProvider;
     }
 }

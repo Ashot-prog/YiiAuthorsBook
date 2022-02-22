@@ -70,7 +70,7 @@ class BookController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'author_id' => $this->findAuthorId()
+            'author_id' => Author::authorNameIds()
         ]);
     }
 
@@ -90,7 +90,7 @@ class BookController extends Controller
         }
         return $this->render('create', [
             'model' => $model,
-            'author_id' => $this->findAuthorId()
+            'author_id' => Author::authorNameIds()
         ]);
     }
 
@@ -104,13 +104,8 @@ class BookController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $authors = BookAuthor::find()
-            ->where(['book_id' => $id])
-            ->all();
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            foreach ($authors as $abm) {
-                $abm->delete();
-            }
+            BookAuthor::deleteAll(['book_id' => $id]);
             foreach ($model->author_id as $id) {
                 BookAuthor::createBookAuthors($model, $id);
             }
@@ -119,7 +114,7 @@ class BookController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'author_id' => ArrayHelper::map(Author::find()->asArray()->all(), 'id', 'name')
+            'author_id' => Author::authorNameIds()
         ]);
     }
 
@@ -153,8 +148,4 @@ class BookController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function findAuthorId()
-    {
-        return ArrayHelper::map(Author::find()->asArray()->all(), 'id', 'name');
-    }
 }

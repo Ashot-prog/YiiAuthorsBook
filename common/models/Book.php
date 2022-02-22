@@ -50,4 +50,5 @@ class Book extends ActiveRecord
         return $authors;
 
     }
+
 }

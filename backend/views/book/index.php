@@ -1,8 +1,10 @@
 <?php
 
+use common\models\Author;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use backend\controllers\BookController;
 
 $this->title = 'Book';
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,13 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'name',
             [
-                'attribute' => ' author ',
-                'format' => 'html',
+                'attribute' => 'authors',
+                'format' => 'raw',
+                'filter' => Author::authorNameIds(),
                 'label' => 'Author',
-
                 'value' => function (\common\models\Book $model) {
                     $html = '<ul>';
                     //     echo '<pre>';print_r($model->id);
